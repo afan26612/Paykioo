@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WA BUG PANEL - HilmanDev</title>
+  
+  <<style>
+  body {
+    margin: 0;
+    background: url("https://files.catbox.moe/drjqb8.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+.teks-hitam {
+  color: black;
+}
+
+  .container {
+    text-align: center;
+    width: 95%;
+    max-width: 500px;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #000;
+    color: #0f0;
+    border: 1px solid #0f0;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: #0f0;
+    font-weight: bold;
+    border: 2px solid #0f0;
+    cursor: pointer;
+    transition: .3s;
+  }
+
+  button:hover {
+    background: #0f0;
+    color: #000;
+  }
+
+  .btn-bug {
+    width: calc(33.33% - 10px);
+    margin: 5px;
+    display: inline-block;
+  }
+
+  .notif {
+    margin-top: 10px;
+    font-size: 14px;
+    white-space: pre-line;
+    font-weight: bold;
+  }
+
+  #loadingText {
+    display: none;
+    animation: blink 1s step-end infinite;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.4; }
+  }
+
+  .dev-link {
+    display: inline-block;
+    margin: 20px auto 10px;
+    padding: 6px 14px;
+    color: #00ffff;
+    border: 1px solid #00ffff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .dev-link:hover {
+    background: #00ffff;
+    color: #000;
+  }
+
+  .promo-text, .warning-text {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .promo-text {
+    color: #0f0;
+  }
+
+  .warning-text {
+    color: red;
+  }
+
+  .copyright {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #555;
+  }
+  </style>
+</head>
+<body>
+
+
+<div class="container">
+  <h2>💀 APK BUG BY BAILA</h2>
+
+  <div id="loginBox">
+    <input type="password" id="accessCode" placeholder="masukan kode" />
+    <button onclick="verifyCode()">MASUK</button>
+    <div class="notif" id="notifLogin"></div>
+    <div style="margin-top: 10px;">
+      <span class="teks-hitam">Tidak tahu kode?</span>
+      <a class="dev-link" href="https://wa.me/6282246607785" target="_blank">Klik di sini</a>
+    </div>
+  </div>
+
+  <div id="mainPanel" style="display:none;">
+    <input type="text" id="targetNumber" placeholder="Nomor Target (628xxxxxxx)" />
+
+<!-- Overlay QR Bayar -->
+<div id="qrOverlay" style="display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
+  <h2 style="color: yellow;">🔒 Harus bayar 1.000 untuk melanjutkan bug</h2>
+  
+  <!-- Gambar QR kamu -->
+  <img src="https://g.top4top.io/p_347753xuh1.jpg" alt="QR Code" style="width: 300px; height: 300px; margin: 20px 0; border: 3px solid white; border-radius: 12px;">
+
+  <p id="countdown" style="font-size: 24px; margin-bottom: 10px;">Sisa waktu: 00:30</p>
+  
+  <button id="lanjutBtn" style="padding: 10px 20px; font-size: 16px; background: gray; color: white; border: none; cursor: not-allowed;" disabled>Lanjutkan</button>
+</div>
+
+
+    <!-- Notif proses kirim -->
+    <div class="notif" id="loadingText">⏳ Sedang mengirim bug...</div>
+    <div class="notif" id="notifBug"></div>
+
+    <!-- 2 Baris 3 Tombol -->    <div style="margin-top: 20px;">
+      <button class="btn-bug" onclick="kirimBug('Super Delay')">Super Delay</button>
+      <button class="btn-bug" onclick="kirimBug('Ghost Crash')">Ghost Crash</button>
+      <button class="btn-bug" onclick="kirimBug('Phantom Freeze')">Phantom Freeze</button>
+    </div>
+    <div>
+      <button class="btn-bug" onclick="kirimBug('Cyber Glitch')">Cyber Glitch</button>
+      <button class="btn-bug" onclick="kirimBug('Data Flood')">Data Flood</button>
+      <button class="btn-bug" onclick="kirimBug('Silent Crash')">Silent Crash</button>
+    </div>
+
+    <!-- Tombol Developer -->
+    <a class="dev-link" href="https://wa.me/6282246607785" target="_blank">👨‍💻 Developer</a>
+
+    <!-- Promosi & Larangan -->
+    <p class="promo-text">💎 Mau bug yg lebih ganas, silahkan join murbug, mau join cat dev.</p>
+    <p class="warning-text">🚫 Gunakan dengan bijak. Penyalahgunaan bukan tanggung jawab developer.</p>
+
+    <div class="copyright">© 2025 baila</div>
+  </div>
+</div>
+ 
+<script>
+  function showQrOverlay() {
+    const overlay = document.getElementById("qrOverlay");
+    const countdownText = document.getElementById("countdown");
+    const lanjutBtn = document.getElementById("lanjutBtn");
+
+    overlay.style.display = "flex";
+
+    let timeLeft = 30; // ⏳ Hitungan mundur dari 30 detik
+
+    const countdown = setInterval(() => {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+
+      // Update tampilan countdown
+      countdownText.textContent = `Sisa waktu: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      // Jika sudah 0 detik, aktifkan tombol dan hentikan timer
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        lanjutBtn.disabled = false;
+        lanjutBtn.style.cursor = "pointer";
+        lanjutBtn.style.background = "#0f0";
+        lanjutBtn.onclick = () => {
+          overlay.style.display = "none";
+        };
+      }
+
+      timeLeft--;
+    }, 1000);
+  }
+
+
+  function verifyCode() {
+    const code = document.getElementById("accessCode").value.trim();
+    const notif = document.getElementById("notifLogin");
+    notif.textContent = "";
+
+    if (code === "BAILA APK") {
+      notif.style.color = "#0f0";
+      notif.textContent = "✅ Akses diterima!";
+      setTimeout(() => {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("mainPanel").style.display = "block";
+        showQrOverlay(); // ✅ QR overlay ditampilkan setelah login berhasil
+      }, 700);
+    } else {
+      notif.style.color = "red";
+      notif.textContent = "❌ Kode salah!";
+    }
+  }
+
+  function showQrOverlay() {
+    const overlay = document.getElementById("qrOverlay");
+    const countdownText = document.getElementById("countdown");
+    const lanjutBtn = document.getElementById("lanjutBtn");
+    overlay.style.display = "flex";
+
+    let timeLeft = 200; // 30 detik
+    const countdown = setInterval(() => {
+      const minutes = Math.floor(timeLeft / 200);
+      const seconds = timeLeft % 200;
+      countdownText.textContent = `Sisa waktu: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        lanjutBtn.disabled = false;
+        lanjutBtn.style.cursor = "pointer";
+        lanjutBtn.style.background = "#0f0";
+        lanjutBtn.onclick = () => {
+          overlay.style.display = "none";
+        };
+      }
+
+      timeLeft--;
+    }, 1000);
+  }
+
+  function kirimBug(jenis) {
+    const nomor = document.getElementById("targetNumber").value.trim();
+    const notif = document.getElementById("notifBug");
+    const loading = document.getElementById("loadingText");
+
+    notif.textContent = "";
+    notif.style.display = "none";
+
+    if (!nomor.startsWith("62") || nomor.length < 10) {
+      notif.style.color = "red";
+      notif.textContent = "⚠️ Nomor tidak valid!";
+      notif.style.display = "block";
+      return;
+    }
+
+    loading.style.display = "block";
+
+    setTimeout(() => {
+      loading.style.display = "none";
+      notif.style.color = "#0f0";
+      notif.textContent = `✅ BUG "${jenis}" berhasil dikirim ke ${nomor}`;
+      notif.style.display = "block";
+    }, 3500);
+  }
+</script>
+
+</body>
+</html>
