@@ -140,7 +140,7 @@
 <script>
 let users = []; // kosong dulu, nanti diisi dari GitHub
 
-fetch("https://raw.githubusercontent.com/USERNAME/REPO/main/users.json")
+fetch("https://github.com/afan26612/Paykioo/blob/main/users.json")
   .then(res => res.json())
   .then(data => {
     users = data.filter(u => !u.expiredAt || Date.now() < u.expiredAt);
