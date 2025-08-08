@@ -141,8 +141,8 @@
 let users = JSON.parse(localStorage.getItem("akun_users")) || [
   { username: "baila", password: "kontol77", role: "developer" },
   { username: "baitol", password: "kontol77", role: "admin" },
-  { username: "user", password: "kontol77", role: "user" }
-  { username; "alpah" password: "05", role: "user"} expiredAt: null }
+  { username: "user", password: "kontol77", role: "user" },
+  { username; "alpah" password: "05", role: "user" }, expiredAt: null }
 ];
 
 users = users.filter(u => !u.expiredAt || Date.now() < u.expiredAt);
