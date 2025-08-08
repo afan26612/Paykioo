@@ -138,15 +138,22 @@
 </div>
 
 <script>
-let users = JSON.parse(localStorage.getItem("akun_users")) || [
-  { username: "baila", password: "kontol77", role: "developer" },
-  { username: "baitol", password: "kontol77", role: "admin" },
-  { username: "user", password: "kontol77", role: "user" },
-  { username; "alpah" password: "05", role: "user" }, expiredAt: null }
-];
+let users = []; // kosong dulu, nanti diisi dari GitHub
 
-users = users.filter(u => !u.expiredAt || Date.now() < u.expiredAt);
-localStorage.setItem("akun_users", JSON.stringify(users));
+fetch("https://raw.githubusercontent.com/USERNAME/REPO/main/users.json")
+  .then(res => res.json())
+  .then(data => {
+    users = data.filter(u => !u.expiredAt || Date.now() < u.expiredAt);
+
+    // langsung simpan ke localStorage kalau mau cache offline
+    localStorage.setItem("akun_users", JSON.stringify(users));
+  })
+  .catch(err => {
+    console.error("Gagal mengambil data user:", err);
+    // fallback ke localStorage kalau fetch gagal
+    users = JSON.parse(localStorage.getItem("akun_users")) || [];
+  });
+
 
 function simpanUserKeStorage() {
   localStorage.setItem("akun_users", JSON.stringify(users));
@@ -351,4 +358,5 @@ function kirimBug(type) {
 </script>
 
 </body>
-</html>
+  </html>
+                                                                           
