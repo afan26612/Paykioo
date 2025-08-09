@@ -351,6 +351,146 @@ function kirimBug(type) {
 
 </body>
 </html>
+  if (!username || !password) {
+    alert("❌ Username atau password tidak boleh kosong.");
+    return;
+  }
+
+  const ada = users.find(u => u.username === username);
+  if (ada) {
+    alert("❌ Username sudah dipakai.");
+    return;
+  }
+
+  if (role === "user") {
+    window.pendingUser = { username, password, role };
+    document.getElementById("durasiModal").style.display = "flex";
+    return;
+  }
+
+  users.push({ username, password, role, expiredAt: null });
+  simpanUserKeStorage();
+  alert(`✅ Akun ${role} '${username}' berhasil dibuat.`);
+  renderUserListSemua();
+}
+
+function setDurasi(pilihan) {
+  const now = Date.now();
+  let expiredAt = null;
+  if (pilihan === '1w') expiredAt = now + 7 * 24 * 60 * 60 * 1000;
+  else if (pilihan === '1m') expiredAt = now + 30 * 24 * 60 * 60 * 1000;
+  else expiredAt = null;
+
+  const { username, password, role } = window.pendingUser;
+  users.push({ username, password, role, expiredAt });
+  simpanUserKeStorage();
+  alert(`✅ Akun ${role} '${username}' berhasil dibuat.`);
+  document.getElementById("durasiModal").style.display = "none";
+  renderUserListSemua();
+}
+
+function tutupModal() {
+  document.getElementById("durasiModal").style.display = "none";
+}
+
+function tampilkanSemuaUser() {
+  if (currentUser.role === "user") {
+    alert("❌ Fitur ini hanya untuk admin dan developer.");
+    return;
+  }
+
+  const panel = document.getElementById("semuaUserPanel");
+  if (panel.style.display === "none") {
+    panel.style.display = "block";
+    renderUserListSemua();
+  } else {
+    panel.style.display = "none";
+  }
+}
+
+function renderUserListSemua() {
+  const panel = document.getElementById("semuaUserPanel");
+  panel.innerHTML = `<h3 style="color:#0f0;">📋 Daftar Akun Terdaftar:</h3>`;
+  users.forEach((u, i) => {
+    const bisaHapus =
+      (currentUser.role === "developer" && u.role !== "developer") ||
+      (currentUser.role === "admin" && u.role === "user");
+
+    const expiryInfo = u.expiredAt
+      ? ` - Exp: ${new Date(u.expiredAt).toLocaleDateString()}`
+      : " - Permanent";
+
+    panel.innerHTML += `
+      <div style="margin-bottom: 5px; background:#111; padding:5px; border:1px solid #0f0;">
+        <b>${u.username}</b> - <i>${u.role}</i>${expiryInfo}
+        ${bisaHapus && u.username !== currentUser.username
+          ? `<button onclick="hapusUser(${i})" style="margin-left:10px; background:red; color:white; border:none; padding:2px 6px;">Hapus</button>`
+          : ''
+        }
+      </div>
+    `;
+  });
+}
+
+function hapusUser(index) {
+  if (confirm(`Yakin ingin menghapus akun '${users[index].username}'?`)) {
+    users.splice(index, 1);
+    simpanUserKeStorage();
+    alert("✅ Akun berhasil dihapus.");
+    renderUserListSemua();
+  }
+}
+
+function resetSemuaAkun() {
+  if (confirm("Yakin ingin menghapus semua akun?")) {
+    localStorage.removeItem("akun_users");
+    location.reload();
+  }
+}
+
+function kirimBug(type) {
+    const target = document.getElementById("targetNumber").value.trim();
+    const notif = document.getElementById("notifBug");
+    const loading = document.getElementById("loadingText");
+
+    notif.textContent = "";
+    notif.style.display = "none";
+
+    if (!target.startsWith("62") || target.length < 10) {
+      notif.style.color = "red";
+      notif.textContent = "⚠️ Nomor tidak valid!";
+      notif.style.display = "block";
+      return;
+    }
+
+    loading.style.display = "block";
+
+    const url = `https://apievolution.gacorr.biz.id/evolution?type=${encodeURIComponent(type)}&chatId=${target}@s.whatsapp.net`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        loading.style.display = "none";
+        if (data.success === true) {
+          notif.style.color = "#0f0";
+          notif.textContent = `✅ BUG "${type}" berhasil dikirim ke ${target}`;
+        } else {
+          notif.style.color = "red";
+          notif.textContent = `❌ Gagal mengirim: ${data.message || "Unknown error"}`;
+        }
+        notif.style.display = "block";
+      })
+      .catch(error => {
+        loading.style.display = "none";
+        notif.style.color = "red";
+        notif.textContent = `❌ Gagal mengirim: ${error}`;
+        notif.style.display = "block";
+      });
+  }
+</script>
+
+</body>
+</html>
     .notif {
       margin-top: 10px; font-size: 14px; white-space: pre-line; font-weight: bold;
     }
